@@ -54,7 +54,10 @@ class Game extends React.Component {
         squares: Array(9).fill(null)
       }],
       xIsNext: true,
-      stepNumber: 0
+      stepNumber: 0,
+      movesCoord: [{
+        x: null, y: null
+      }]
     };
   }
 
@@ -70,10 +73,18 @@ class Game extends React.Component {
     const current = history[history.length-1];
     const squares = current.squares.slice();
 
+    // Get all the moves (x, y)
+    const movesCoord = this.state.movesCoord.slice(0, this.state.stepNumber + 1);
+    //const currentMove = moves[moves.length-1];
+
     // Return early if someone has already won || square is alredy filled
     if (calculateWinner(squares) || squares[i]){
       return;
     }
+
+    // Convert square index into x and y coordinates
+    const {x, y} = getCoordinates(i);
+
     // Push the new current state to history array and prepare for next turn
     squares[i] = this.state.xIsNext ? 'X':'O';
     this.setState({
@@ -81,7 +92,8 @@ class Game extends React.Component {
         squares: squares
       }]),
       xIsNext: !this.state.xIsNext,
-      stepNumber: history.length
+      stepNumber: history.length,
+      movesCoord: movesCoord.concat([{x, y}])
     });
   }
 
@@ -100,14 +112,14 @@ class Game extends React.Component {
     // Create list of the current game state
     // @Step - State of the current iteration of the game being mapped
     // @Move - Move Number
-    const moves = history.map((step, move)=>{
-      const desc = move ? `Move # ${move}` : 'Game Start';
+    const moves = this.state.movesCoord.map((step, move)=>{
+      const desc = typeof step.x === "number"  ? `Move # ${move} on (${step.x},${step.y})` : 'Game Start';
       // Construct and return element pointing to a specific time in the game
       return (
         <li key={move}>
           <a href="#" onClick={()=> this.jumpTo(move)}>{desc}</a>
         </li>
-      );
+      )
     });
 
     // Nested if statement if the game is not yet finished
@@ -151,6 +163,13 @@ function calculateWinner(squares){
     }
   }
   return null;
+}
+
+function getCoordinates(index){
+  const col = 3;
+  const x = Math.floor(index % col);
+  const y = Math.floor(index / col); 
+  return {x, y};
 }
 
 // ========================================
