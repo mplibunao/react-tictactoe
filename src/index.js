@@ -5,7 +5,9 @@ import './index.css';
 // Rather than creating a class, use functional components for components which only render
 function Square(props){
   return (
-    <button className="square" onClick={props.onClick}>
+    <button
+      className={props.winningMove ? "highlight": "square"}
+      onClick={props.onClick}>
       {props.value}
     </button>
   );
@@ -18,6 +20,7 @@ class Board extends React.Component {
       <Square key={`col${i}`}
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i)}
+        winningMove={this.props.winningMove[0] && this.props.winningMove.includes(i) ? true: false}
       />
     );
   }
@@ -108,7 +111,7 @@ class Game extends React.Component {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares).player;
-    const [a,b,c]
+    const winningMove = winner ? calculateWinner(current.squares).winningMove.slice() : Array(3).fill(null);
 
     // Create list of the current game state
     // @Step - State of the current iteration of the game being mapped
@@ -142,6 +145,7 @@ class Game extends React.Component {
           <Board 
             squares={current.squares}
             onClick={(i)=> this.handleClick(i)}
+            winningMove={winningMove}
           />
         </div>
         <div className="game-info">
@@ -178,7 +182,7 @@ function calculateWinner(squares){
       };
     }
   }
-  return null;
+  return {player: null};
 }
 
 function getCoordinates(index){
