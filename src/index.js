@@ -15,7 +15,7 @@ class Board extends React.Component {
 
   renderSquare(i) {
     return (
-      <Square
+      <Square key={`col${i}`}
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i)}
       />
@@ -31,7 +31,7 @@ class Board extends React.Component {
       for(let j=0; j<3; j++){
         boardCol.push(this.renderSquare( (i*3) + j) );
       }
-      boardRow.push(<div className="board-row">{boardCol}</div>)
+      boardRow.push(<div key={`row${i}`} className="board-row">{boardCol}</div>)
       boardCol = [];
     }
     const board = <div>{boardRow}</div>
@@ -52,7 +52,8 @@ class Game extends React.Component {
       stepNumber: 0,
       movesCoord: [{
         x: null, y: null
-      }]
+      }],
+      ascending: true
     };
   }
 
@@ -99,6 +100,10 @@ class Game extends React.Component {
     });
   }
 
+  toggleOrder(){
+    this.setState({ascending: !this.state.ascending}); 
+  }
+
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
@@ -140,7 +145,8 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
-          <ol>{moves}</ol>
+          <a href="#" onClick={()=> this.toggleOrder()}>{this.state.ascending ? `Sort by Descending Order`: `Sort by Ascending Order`}</a>
+          <ol>{this.state.ascending ? moves : moves.reverse()}</ol>
         </div>
       </div>
     );
