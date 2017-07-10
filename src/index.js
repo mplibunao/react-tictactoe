@@ -112,6 +112,28 @@ class Game extends React.Component {
     // Create list of the current game state
     // @Step - State of the current iteration of the game being mapped
     // @Move - Move Number
+
+    const moves = this.state.movesCoord.map((step, move)=>{
+
+      const desc = typeof step.x === "number"  ? `Move # ${move} on (${step.x},${step.y})` : 'Game Start';
+
+      // current move
+      if (move === this.state.stepNumber){
+        return (
+          <li key={move}>
+            <a href="#" className="currentMove" onClick={()=> this.jumpTo(move)}>{desc}</a>
+          </li>
+        );
+      } else{
+        return (
+          <li key={move}>
+              <a href="#" onClick={()=> this.jumpTo(move)}>{desc}</a>
+          </li>
+        );
+      }
+    });
+
+    /*
     const moves = this.state.movesCoord.map((step, move)=>{
       const desc = typeof step.x === "number"  ? `Move # ${move} on (${step.x},${step.y})` : 'Game Start';
       // Construct and return element pointing to a specific time in the game
@@ -121,6 +143,7 @@ class Game extends React.Component {
         </li>
       )
     });
+    */
 
     // Nested if statement if the game is not yet finished
     let status = winner ? `Winner: ${winner}!` : `Next Player: ${current.xIsNext ? 'X' : 'O'}`
