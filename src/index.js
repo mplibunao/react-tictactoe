@@ -74,7 +74,7 @@ class Game extends React.Component {
     //const currentMove = moves[moves.length-1];
 
     // Return early if someone has already won || square is alredy filled
-    if (calculateWinner(squares) || squares[i]){
+    if (calculateWinner(squares).player || squares[i]){
       return;
     }
 
@@ -107,7 +107,8 @@ class Game extends React.Component {
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
-    const winner = calculateWinner(current.squares);
+    const winner = calculateWinner(current.squares).player;
+    const [a,b,c]
 
     // Create list of the current game state
     // @Step - State of the current iteration of the game being mapped
@@ -170,7 +171,11 @@ function calculateWinner(squares){
     const [a,b,c] = lines[i];
     // Check if all three indexes are true
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]){
-      return squares[a];
+      
+      return {
+        player: squares[a],
+        winningMove: [a,b,c]
+      };
     }
   }
   return null;
