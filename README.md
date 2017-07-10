@@ -1,3 +1,11 @@
+To:do
+
+- Display the move locations in the format (1,3) instead of 7
+- Bold the currently-selected item in the move list
+- Rewrite Board Component to use two loops to make the squares instead of hardcoding them
+- Add a toggle that lets you sort the moves in either ascending or descending order
+- When someone wins, highlight the three squares that caused the win
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
